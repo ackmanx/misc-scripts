@@ -1,0 +1,8 @@
+{
+  "name": "misc-scripts",
+  "version": "1.0.0",
+  "dependencies": {
+    "fast-xml-parser": "^3.17.2",
+    "request": "^2.88.2"
+  }
+}

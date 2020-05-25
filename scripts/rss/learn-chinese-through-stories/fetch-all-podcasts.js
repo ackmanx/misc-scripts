@@ -11,7 +11,7 @@ const readFileAsync = promisify(fs.readFile)
 
 async function run() {
     try {
-        const rss = await readFileAsync('./rss.xml', {encoding: 'utf8'})
+        const rss = await readFileAsync('./example-rss.xml', {encoding: 'utf8'})
 
         if (!parser.validate(rss)) {
             console.error('RSS file not valid')

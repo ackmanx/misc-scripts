@@ -8,17 +8,23 @@ const fs = require('fs')
 const request = require('request')
 
 const readFileAsync = promisify(fs.readFile)
+const requestAsync = promisify(request)
 
 async function run() {
     try {
-        const rss = await readFileAsync('./example-rss.xml', {encoding: 'utf8'})
+        // const rss = await readFileAsync('./example-rss.xml', {encoding: 'utf8'})
 
-        if (!parser.validate(rss)) {
-            console.error('RSS file not valid')
+        const response = await requestAsync('https://learningchinesethroughstories.libsyn.com/rss')
+        const rssFeed = response.body
+
+        const rssValidation = parser.validate(rssFeed)
+
+        if (rssValidation !== true) {
+            console.error(rssValidation.err)
             process.exit()
         }
 
-        const parsedFeed = parser.parse(rss, {attributeNamePrefix: '__', ignoreAttributes: false})
+        const parsedFeed = parser.parse(rssFeed, {attributeNamePrefix: '__', ignoreAttributes: false})
 
         const allEpisodes = parsedFeed.rss.channel.item.map(episode => {
 

@@ -21,7 +21,10 @@ async function run() {
         const parsedFeed = parser.parse(rss, {attributeNamePrefix: '__', ignoreAttributes: false})
 
         const allEpisodes = parsedFeed.rss.channel.item.map(episode => {
-            const url = (episode.enclosure && episode.enclosure.__url) || ''
+
+            if (!episode.enclosure) return
+
+            const url = episode.enclosure.__url
             const insecureUrl = url.replace('https://', 'http://')
             const fileType = url.includes('.mp3') ? '.mp3' : '.m4a'
 
@@ -31,21 +34,28 @@ async function run() {
                 title: episode.title,
                 url: insecureUrl,
             }
+        }).filter(Boolean)
+
+        let delay = 0
+
+        allEpisodes.forEach(episode => {
+            //This date format is not timezone safe, but I don't really care because it's just a date published so I can pretend it was published at that time where I am now
+            const formattedDatePublished = new Date(episode.pubDate).toISOString().split('T')[0]
+            const filePath = `./podcasts/${formattedDatePublished} - ${episode.title}${episode.fileType}`
+
+            if (fs.existsSync(filePath)) {
+                return console.log('Conflict, file already exists. Skipping:', filePath)
+            }
+
+            setTimeout(() => {
+                console.log('Getting:', episode.title)
+                console.log('Saving as:', filePath)
+
+                request(episode.url).pipe(fs.createWriteStream(filePath))
+            }, delay)
+
+            delay = Math.floor(delay + Math.random() * 5 * 1000)
         })
-
-        //This date format is not timezone safe, but I don't really care because it's just a date published so I can pretend it was published at that time where I am now
-        const formattedDatePublished = new Date(allEpisodes[0].pubDate).toISOString().split('T')[0]
-        const filePath = `./podcasts/${formattedDatePublished} - ${allEpisodes[0].title}${allEpisodes[0].fileType}`
-
-        console.log('Getting:', allEpisodes[0].title)
-        console.log('Saving as:', filePath)
-
-        if (fs.existsSync(filePath)) {
-            return console.log('Conflict, file already exists. Skipping:', filePath)
-        }
-
-
-        request(allEpisodes[0].url).pipe(fs.createWriteStream(filePath))
     } catch (error) {
         console.error(error)
     }

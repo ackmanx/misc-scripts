@@ -1,5 +1,9 @@
 /*
  * Downloads every podcast in the feed with trivial throttling
+ * This checks for the files in ./podcasts and skips if they are there
+ * It checks for existence based on the file name so if they are moved or renamed they will download again
+ *
+ * TODO: Create a text file to cache the filenames in instead of checking for actual files
  */
 
 const parser = require('fast-xml-parser')

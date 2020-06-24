@@ -1,0 +1,7 @@
+Often-used Keyboard Shortcuts:
+
+space   Start playback at current cursor, do not set cursor on Stop
+x       Start playback at current cursor, set cursor on Stop
+p       Pause playback but do not set cursor
+,       Go back 1 second
+.       Go forward 1 second

@@ -16,7 +16,7 @@ const requestAsync = promisify(request)
 
 async function run() {
     try {
-        // const rss = await readFileAsync('./example-rss.xml', {encoding: 'utf8'})
+        const completedDownloads = require('./completed-downloads.json')
 
         const response = await requestAsync('https://learningchinesethroughstories.libsyn.com/rss')
         const rssFeed = response.body
@@ -53,15 +53,23 @@ async function run() {
             const formattedDatePublished = new Date(episode.pubDate).toISOString().split('T')[0]
             const filePath = `./podcasts/${formattedDatePublished} - ${episode.title}${episode.fileType}`
 
-            if (fs.existsSync(filePath)) {
-                return console.log('Conflict, file already exists. Skipping:', filePath)
+            if (completedDownloads.includes(episode.pubDate)) {
+                return console.log('Already downloaded. Skipping:', filePath)
             }
 
-            setTimeout(() => {
+            if (fs.existsSync(filePath)) {
+                completedDownloads.push(episode.pubDate)
+                fs.writeFile('./completed-downloads.json', JSON.stringify(completedDownloads), err => err && console.error(err))
+                return console.log('Conflict, file already exists. Added to completed downloads cache. Skipping:', filePath)
+            }
+
+            setTimeout(async () => {
                 console.log('Getting:', episode.title)
                 console.log('Saving as:', filePath)
 
-                request(episode.url).pipe(fs.createWriteStream(filePath))
+                await request(episode.url).pipe(fs.createWriteStream(filePath))
+                completedDownloads.push(episode.pubDate)
+                fs.writeFile('./completed-downloads.json', JSON.stringify(completedDownloads), err => err && console.error(err))
             }, delay)
 
             delay = Math.floor(delay + Math.random() * 5 * 1000)

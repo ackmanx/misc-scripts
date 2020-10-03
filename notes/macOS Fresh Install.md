@@ -47,6 +47,8 @@ Go through all preferences because that's how I roll
 # Software to Download (in order) ---------------------------------------------------------------------------
 
 ## Chrome
+Update Adblock Plus options to have custom filter `cnn.com/*/video`
+
 ## Alfred
 ## Spectacle
 
@@ -66,6 +68,9 @@ In Step 3 (Google Drive)
 
 ## Spotify
 
+## Zoom
+For Chinese lessons
+
 ## As Desired
 * Development
     * IntelliJ
@@ -74,10 +79,21 @@ In Step 3 (Google Drive)
 * Macs Fan Control
 * Photography/Video
     * Pixelmator (App Store)
+    * JustPlay (App Store)
     * Handbrake
+        * Re-encode video or rip non-protected DVDs
+    * Adobe Lightroom
+        * Photo organization option 1 (Library function works after free trial)
     * Mylio
+        * Photo organization option 2 (Free option but syncing with file system changes seemed less stable)
     * LosslessCut
     * HoudahGeo
+        * Geotagging photos
+* Scanning
+    * Epson ScanSmart
+    * Epson Scan 2 Utility
+* Chat
+    * Signal
 
 
 # Stuff to do in the Terminal ---------------------------------------------------------------------------
@@ -158,7 +174,7 @@ Then can hide things with:
 
 # Install Software I Use Constantly Before Anything
 * Google Chrome
-* Alfred 3
+* Alfred 4
 * Spectacle
 * Visual Studio Code
 * Dropbox
@@ -279,8 +295,8 @@ oh-my-zsh
 ## Homebrew
 https://brew.sh/
 
-## node/npm
-https://nodejs.org/en
+## node/npm/nvm
+https://github.com/nvm-sh/nvm
 
 ## Sourcetree
 https://www.sourcetreeapp.com/
@@ -288,10 +304,10 @@ https://www.sourcetreeapp.com/
 ## IntelliJ
 https://www.jetbrains.com/idea/download/download-thanks.html?platform=mac
 
-## BitBucket
-In order to access Bit Bucket without a password, you have to register your computer's SSH key.
+## BitBucket or GitHub
+In order to access without a password and login when pushing code, you have to register your computer's SSH key.
     First generate one.
         $ ssh-keygen
 
-    Then copy it to the clipboard and paste into Bit Bucket's user preferences page.
+    Then copy it to the clipboard and paste into the user preferences page somewhere.
 	    $ cat ~/.ssh/id_rsa.pub | pbcopy

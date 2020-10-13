@@ -2,10 +2,10 @@
 
 /*
  * To install:
- * Run `install.sh`
+ * Add to path and make executable
  *
  * To run:
- * `cpr`
+ * `cpr.js`
  */
 
 const querystring = require('querystring')

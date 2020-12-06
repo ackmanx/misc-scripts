@@ -19,3 +19,13 @@ document.querySelectorAll('.starred-item__title').forEach(item => {
 
     item.innerHTML = filePath.replaceAll('/', ' ▪ ')
 })
+
+// In order to work as a bookmarklet, gotta use `var` and semi-colons
+(function () {
+    document.querySelectorAll('.starred-item__title').forEach(item => {
+        var url = item.getAttribute('href').split('?')[0];
+        var filePath = decodeURI(url.split('https://www.dropbox.com/pri/get/')[1]);
+
+        item.innerHTML = filePath.replaceAll('/', ' ▪ ');
+    })
+})()

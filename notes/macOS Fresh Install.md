@@ -224,6 +224,10 @@ Relaunch Finder
         * Spring Loading Delay -> Max
         * Trackpad Options -> Enable dragging -> three finger drag
 
+* Disable screenshot preview
+    * Open Screenshot app
+    * Click Options and uncheck the option
+
 
 # ------------------------------------------------------------------------------------------------------
 # Software to Install Whenever

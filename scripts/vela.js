@@ -12,46 +12,59 @@
 (function() {
     'use strict'
 
+    /* ------------------------------------------------------------------------------------
+     * Build Info Page
+     * --------------------------------------------------------------------------------- */
+    function forBuildInfoPage (mutation) {
+        if (mutation.addedNodes[0]?.tagName === 'DIV' && mutation.addedNodes[0].querySelector('.commit a')) {
+            const commitEl = document.querySelector('.commit a')
+            const pullRequestNumber = commitEl.attributes.href.value.split('/').pop()
+            commitEl.innerHTML = pullRequestNumber
+        }
+    }
+
+    /* ------------------------------------------------------------------------------------
+     * Build Listing Page
+     * --------------------------------------------------------------------------------- */
+    function forBuildListingPage (mutation) {
+        // If pager element is there, then I'm guessing the builds are in the DOM now too so it's safe to mess around
+        if (typeof mutation.addedNodes[0]?.className === 'string' && mutation.addedNodes[0].className.includes('pager-actions')) {
+            document.querySelectorAll('.build-container').forEach(container => {
+                if (container.querySelector('.sender').innerHTML !== 'EricMajerus' || container.querySelector('.commit').innerText.includes('push')) {
+                    container.remove()
+                    return
+                }
+
+                const buildHref = container.querySelector('[data-test="build-number"]').attributes.href.value
+                const buildStatusEl = container.querySelector('[data-test="build-status"]')
+
+                buildStatusEl.addEventListener('click', () => {
+                    window.location.href = buildHref
+                })
+
+                buildStatusEl.style.cursor = "pointer"
+            })
+
+            document.querySelectorAll('.commit a').forEach(commitEl => {
+                const pullRequestNumber = commitEl.attributes.href.value.split('/').pop()
+                commitEl.innerHTML = pullRequestNumber
+            })
+        }
+    }
+
+    /* ------------------------------------------------------------------------------------
+     * Main
+     * --------------------------------------------------------------------------------- */
     function callback(mutationList, observer) {
         mutationList.forEach(mutation => {
-            /*
-             * Build info page
-            */
+            // Build info page
             if (/\/GEM\/slingshot\/\d+/.test(document.location.pathname)) {
-                if (mutation.addedNodes[0]?.tagName === 'DIV' && mutation.addedNodes[0].querySelector('.commit a')) {
-                    const commitEl = document.querySelector('.commit a')
-                    const pullRequestNumber = commitEl.attributes.href.value.split('/').pop()
-                    commitEl.innerHTML = pullRequestNumber
-                }
+                forBuildInfoPage(mutation)
             }
 
-            /*
-             * Build listing page
-            */
+            // Build listing page
             if (/\/GEM\/slingshot/.test(document.location.pathname)) {
-                // If pager element is there, then I'm guessing the builds are in the DOM now too so it's safe to mess around
-                if (typeof mutation.addedNodes[0]?.className === 'string' && mutation.addedNodes[0].className.includes('pager-actions')) {
-                    document.querySelectorAll('.build-container').forEach(container => {
-                        if (container.querySelector('.sender').innerHTML !== 'EricMajerus' || container.querySelector('.commit').innerText.includes('push')) {
-                            container.remove()
-                            return
-                        }
-
-                        const buildHref = container.querySelector('[data-test="build-number"]').attributes.href.value
-                        const buildStatusEl = container.querySelector('[data-test="build-status"]')
-
-                        buildStatusEl.addEventListener('click', () => {
-                            window.location.href = buildHref
-                        })
-
-                        buildStatusEl.style.cursor = "pointer"
-                    })
-
-                    document.querySelectorAll('.commit a').forEach(commitEl => {
-                        const pullRequestNumber = commitEl.attributes.href.value.split('/').pop()
-                        commitEl.innerHTML = pullRequestNumber
-                    })
-                }
+                forBuildListingPage(mutation)
             }
         })
     }

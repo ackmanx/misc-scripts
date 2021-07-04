@@ -19,7 +19,7 @@
         if (mutation.addedNodes[0]?.tagName === 'DIV' && mutation.addedNodes[0].querySelector('.commit a')) {
             const commitEl = document.querySelector('.commit a')
             const pullRequestNumber = commitEl.attributes.href.value.split('/').pop()
-            commitEl.innerHTML = pullRequestNumber
+            commitEl.innerHTML = `#${pullRequestNumber}`
         }
     }
 
